@@ -24,8 +24,8 @@ pipeline {
             }
             steps {
                 sh 'apk add --update python3 py-pip'
-                sh 'pip install Flask'
-                sh 'pip install xmlrunner'
+                sh 'pip install --break-system-packages Flask'
+                sh 'pip install --break-system-packages xmlrunner'
                 sh 'python3 app_tests.py'
             }
             post {
