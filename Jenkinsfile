@@ -40,5 +40,19 @@ pipeline {
                 }
             }
         }
+        stage('Docker Build & Push') {
+            steps {
+                script {
+                    // Збираємо Docker-образ із тегом номеру поточної збірки
+                    app = docker.build("sabdshh/python-flask-app:${BUILD_NUMBER}")
+                    
+                    // Авторизуємося в Docker Hub за допомогою збережених раніше credentials та відправляємо образ
+                    docker.withRegistry('https://index.docker.io/v1/', 'dockerhub-credentials') {
+                        app.push()
+                        app.push("latest")
+                    }
+                }
+            }
+        }
     }
 }
