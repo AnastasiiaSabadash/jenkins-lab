@@ -10,20 +10,23 @@ pipeline {
                 checkout scm
             }
         }
+
         stage('Build') {
             steps {
                 echo "Building ...${BUILD_NUMBER}"
                 echo "Build completed"
             }
         }
+
         stage('Test') {
-            agent { 
-                docker { 
+            agent {
+                docker {
                     image 'alpine'
                     args '-u=root'
                 }
             }
             steps {
+                sh 'rm -rf test-reports'
                 sh 'apk add --update python3 py-pip'
                 sh 'pip install --break-system-packages Flask'
                 sh 'pip install --break-system-packages unittest-xml-reporting'
@@ -41,6 +44,7 @@ pipeline {
                 }
             }
         }
+
         stage('Docker Build & Push') {
             agent any
             steps {
