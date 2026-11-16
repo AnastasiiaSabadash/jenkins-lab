@@ -2,6 +2,7 @@ pipeline {
     options { timestamps() }
 
     agent none
+
     stages {
         stage('Check scm') {
             agent any
@@ -41,13 +42,13 @@ pipeline {
             }
         }
         stage('Docker Build & Push') {
+            agent any
             steps {
                 script {
                     def app = docker.build("sabdshh/python-flask-app:${BUILD_NUMBER}", "-f Task/Dockerfile .")
-                    
                     docker.withRegistry('https://index.docker.io/v1/', 'dockerhub-credentials') {
                         app.push()
-                        app.push("latest")
+                        app.push('latest')
                     }
                 }
             }
