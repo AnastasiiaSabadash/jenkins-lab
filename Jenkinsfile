@@ -43,7 +43,7 @@ pipeline {
         stage('Docker Build & Push') {
             steps {
                 script {
-                    app = docker.build("sabdshh/python-flask-app:${BUILD_NUMBER}", "-f Task/Dockerfile .")
+                    def app = docker.build("sabdshh/python-flask-app:${BUILD_NUMBER}", "-f Task/Dockerfile .")
                     
                     docker.withRegistry('https://index.docker.io/v1/', 'dockerhub-credentials') {
                         app.push()
